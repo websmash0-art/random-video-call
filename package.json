@@ -1,0 +1,14 @@
+{
+  "name": "jitsi-random-video-call",
+  "version": "1.0.0",
+  "description": "Random video call website using Jitsi Meet and a small Node matchmaking server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.13.0",
+    "uuid": "^9.0.0"
+  }
+}
