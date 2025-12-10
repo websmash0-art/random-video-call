@@ -1,7 +1,7 @@
 {
-  "name": "jitsi-random-video-call",
+  "name": "random-video-call",
   "version": "1.0.0",
-  "description": "Random video call website using Jitsi Meet and a small Node matchmaking server",
+  "description": "Full Omegle-style random video call using Jitsi + WebSocket matchmaking",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
