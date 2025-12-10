@@ -1,21 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Omegle-style Video Chat</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Video Call</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #111;
+            color: white;
+            height: 100vh;
+            margin: 0;
+            font-family: sans-serif;
+        }
+        video {
+            width: 45%;
+            max-width: 400px;
+            margin: 10px;
+            border-radius: 10px;
+            background: black;
+        }
+        #videos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        #nextBtn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background: #ff3b3b;
+            color: white;
+        }
+        #nextBtn:hover {
+            background: #ff1a1a;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-  <h1>🎥 Random Video Chat</h1>
-  <div id="status">Connecting...</div>
-  <div class="videos">
-    <video id="localVideo" autoplay muted></video>
-    <video id="remoteVideo" autoplay></video>
-  </div>
-  <button id="nextBtn">Next</button>
-</div>
-<script src="client.js"></script>
+    <h1>Random Video Call</h1>
+    <div id="videos">
+        <video id="localVideo" autoplay muted playsinline></video>
+        <video id="remoteVideo" autoplay playsinline></video>
+    </div>
+    <button id="nextBtn">Next</button>
+
+    <script src="client.js"></script>
 </body>
 </html>
