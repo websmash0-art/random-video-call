@@ -1,7 +1,7 @@
 {
   "name": "random-video-call",
   "version": "1.0.0",
-  "description": "Full Omegle-style random video call using Jitsi + WebSocket matchmaking",
+  "description": "Full Omegle-style video chat using WebRTC P2P + Node WebSocket",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
