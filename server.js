@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
@@ -9,48 +10,47 @@ const wss = new WebSocket.Server({ server });
 
 app.use(express.static('public'));
 
-// Simple matchmaking: keep one waiting client
-let waiting = null;
+let waiting = null; // stores one waiting client
 
 wss.on('connection', (ws) => {
   ws.id = uuidv4();
-  console.log('Client connected', ws.id);
+  ws.isWaiting = false;
 
   ws.on('message', (msg) => {
-    try {
-      const data = JSON.parse(msg);
-      if (data.type === 'join') {
-        // If someone is waiting, pair them
-        if (waiting && waiting !== ws && waiting.readyState === WebSocket.OPEN) {
-          const room = 'random_' + uuidv4().split('-')[0];
-          ws.partner = waiting;
-          waiting.partner = ws;
+    let data;
+    try { data = JSON.parse(msg); } catch (e) { return; }
 
-          ws.send(JSON.stringify({ type: 'room', room }));
-          waiting.send(JSON.stringify({ type: 'room', room }));
+    if (data.type === 'join') {
+      if (waiting && waiting !== ws && waiting.readyState === WebSocket.OPEN) {
+        const room = 'random_' + uuidv4().split('-')[0];
 
-          waiting = null;
-          console.log('Paired', ws.id, ws.partner.id, 'room', room);
-        } else {
-          // Put this client in waiting slot
-          waiting = ws;
-          ws.send(JSON.stringify({ type: 'waiting' }));
-          console.log('Client waiting', ws.id);
-        }
-      } else if (data.type === 'leave') {
-        if (ws.partner && ws.partner.readyState === WebSocket.OPEN) {
-          ws.partner.send(JSON.stringify({ type: 'partner_left' }));
-          ws.partner.partner = null;
-        }
-        if (waiting === ws) waiting = null;
+        ws.partner = waiting;
+        waiting.partner = ws;
+
+        ws.send(JSON.stringify({ type: 'room', room }));
+        waiting.send(JSON.stringify({ type: 'room', room }));
+
+        waiting = null;
+        console.log('Paired', ws.id, ws.partner.id, 'room', room);
+      } else {
+        waiting = ws;
+        ws.isWaiting = true;
+        ws.send(JSON.stringify({ type: 'waiting' }));
       }
-    } catch (e) {
-      console.error('Invalid message', e);
+    }
+
+    if (data.type === 'leave') {
+      if (ws.partner && ws.partner.readyState === WebSocket.OPEN) {
+        ws.partner.send(JSON.stringify({ type: 'partner_left' }));
+        ws.partner.partner = null;
+      }
+      if (waiting === ws) waiting = null;
+      ws.isWaiting = false;
+      ws.partner = null;
     }
   });
 
   ws.on('close', () => {
-    console.log('Client disconnected', ws.id);
     if (ws.partner && ws.partner.readyState === WebSocket.OPEN) {
       ws.partner.send(JSON.stringify({ type: 'partner_left' }));
       ws.partner.partner = null;
@@ -60,6 +60,4 @@ wss.on('connection', (ws) => {
 });
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+server.listen(PORT, () => console.log('Server running on http://localhost:' + PORT));
