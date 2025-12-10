@@ -1,21 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Video Call</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Random Video Call</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="container">
+    <h1>🔗 Random Video Call</h1>
 
-    <h2>🔗 Random Video Call</h2>
-    <button id="startBtn">Start</button>
-
-    <div id="videos">
-        <video id="localVideo" autoplay muted></video>
-        <video id="remoteVideo" autoplay></video>
+    <div class="controls">
+      <button id="startBtn">Start</button>
+      <button id="nextBtn" disabled>Next</button>
+      <div id="status">Idle</div>
     </div>
 
-    <script src="client.js"></script>
+    <div id="roomInfo" class="roomInfo"></div>
+    <div id="meet" class="meet"></div>
+    <div class="help">Open the same page from another device to get matched.</div>
+  </div>
+
+  <script src="https://meet.jit.si/external_api.js"></script>
+  <script src="client.js"></script>
 </body>
 </html>
